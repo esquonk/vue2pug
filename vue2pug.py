@@ -29,7 +29,7 @@ def process_path(path):
         process_file(path)
     elif os.path.isdir(path):
         for root, dirs, files in os.walk(path):
-            for name in files:
+            for name in filter(lambda f: f.endswith('.vue'), files):
                 process_file(os.path.join(root, name))
     else:
         raise Exception(f'Bad path: {path}')
