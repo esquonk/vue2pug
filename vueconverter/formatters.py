@@ -31,8 +31,13 @@ class VueSfcFormatter(Formatter):
 
     def format_tag(self, tag: Tag) -> str:
         if tag.parent and tag.parent.name == '[document]' and tag.name == 'template' and tag.attrs.get('lang') != 'pug':
-            pug_formatter = PugFormatter(next(filter(lambda x: isinstance(x, Tag), tag.children)))
-            pug_template = add_tab(pug_formatter.format())
+            try:
+                root_tag = next(filter(lambda x: isinstance(x, Tag), tag.children))
+            except StopIteration:
+                pug_template = ''
+            else:
+                pug_formatter = PugFormatter(root_tag)
+                pug_template = add_tab(pug_formatter.format())
             return f'<template lang="pug">\n{pug_template}\n</template>'
 
         if tag.name == '[document]':
@@ -66,10 +71,11 @@ class PugFormatter(Formatter):
     def format_attribute(self, key: str, val) -> str:
         if val is None:
             return key
-        elif '\n' in val:
-            return f'{key}=`{val}`'
-        else:
-            return f'{key}="{val}"'
+
+        if '\n' in val:
+            val = '\\\n'.join(val.splitlines())
+
+        return f'{key}="{val}"'
 
     def format_tag(self, tag: Tag) -> str:
         if tag.name == 'div' and (tag.attrs.get('id', '').strip() or tag.attrs.get('class', '').strip()):

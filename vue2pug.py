@@ -6,14 +6,14 @@ from vueconverter.vueparser import VueParser
 
 
 def process_file(filename: str):
+    print(filename)
+
     with open(filename, 'rt', encoding='utf-8') as file:
         contents = file.read()
         result = process_template(contents)
 
     with open(filename, 'wt', encoding='utf-8') as outfile:
         outfile.write(result)
-
-    print(filename)
 
 
 def process_template(content: str) -> str:
