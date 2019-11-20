@@ -38,13 +38,12 @@ class VueSfcFormatter(Formatter):
             else:
                 pug_formatter = PugFormatter(root_tag)
                 pug_template = add_tab(pug_formatter.format())
-            
-            templateAttrs = [ 'lang="pug"' ]
-            
-            if 'functional' in tag.attrs:
-                templateAttrs.append('functional')
 
-            attrs_str = ' '.join(templateAttrs)
+            attrs_str = 'lang="pug"'
+
+            if tag.attrs:
+                attrs_str += ' '\
+                          + ' '.join([f'{x}="{y}"' if y != None else x for x, y in tag.attrs.items()])
 
             return f'<template {attrs_str}>\n{pug_template}\n</template>'
 
