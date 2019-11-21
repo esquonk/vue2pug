@@ -41,7 +41,7 @@ class VueSfcFormatter(Formatter):
 
             tag.attrs['lang'] = 'pug'
 
-            attrs_str = ' '.join(f'{k}="{v}"' if v is not None else k for k, v in tag.attrs.items())
+            attrs_str = ' '.join(self.format_attribute(k, v) for k, v in tag.attrs.items())
 
             return f'<template {attrs_str}>\n{pug_template}\n</template>'
 
