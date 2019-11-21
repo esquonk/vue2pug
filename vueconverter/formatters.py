@@ -39,9 +39,10 @@ class VueSfcFormatter(Formatter):
                 pug_formatter = PugFormatter(root_tag)
                 pug_template = add_tab(pug_formatter.format())
 
-            tag.attrs['lang'] = 'pug'
+            pugTemplateTagAttrs = tag.attrs.copy()
+            pugTemplateTagAttrs['lang'] = 'pug'
 
-            attrs_str = ' '.join(self.format_attribute(k, v) for k, v in tag.attrs.items())
+            attrs_str = ' '.join(self.format_attribute(k, v) for k, v in pugTemplateTagAttrs.items())
 
             return f'<template {attrs_str}>\n{pug_template}\n</template>'
 
